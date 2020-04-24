@@ -1,0 +1,42 @@
+From the controller to recoverer, there exist gRPCs as listed below:
+
+tellVersion(int imageN, int version, int size)
+Tell the recoverer the size of the file.
+No return value.
+
+chunkToSend(int imageN)
+Ask for which chunks are not presented in the recoverer side.
+Chunks are 1M size. We can adjust it.
+Return "repeated int" as chunk numbers needed.
+
+sendChunk(int imageN, int chunkN, bytes data, int checksum)
+Send a chunk.
+
+From the master to recoverer, there exist gRPCs as listed below:
+
+Example:
+
+C1(controller of Image 1): tellVersion(1, 0, 2.4M)
+R2(recoverer at Node 2): returns, to tell itself ready to receive
+
+C1: chunkToSend(1)//Ask for chunks to send, for Image 1, version 0)
+R2: returns {0, 1, 2}
+
+C1: sendChunk(1, 0, 1M data, checksum)
+R2: returns
+
+C1: sendChunk(1, 1, 1M data, checksum)
+R2: returns
+
+C1: sendChunk(1, 2, 0.4M data, checksum)
+R2: returns
+
+C1: chunkToSend(1)
+R2: returns {}//complete!
+
+C1: tellVersion(1, 1, 1.2M)
+R2: returns, ready to receive
+
+... ... ...
+
+Hint: make sure we have the same knowledge on "bytes" and "repeated int" data types before you start.

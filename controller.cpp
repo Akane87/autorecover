@@ -88,13 +88,13 @@ int main(int argc, char** argv) {
         executeCMD(commandStr);
         std::cout<<"\n";
 
-//        //Removing old image in files
-//        if (i!=1) {
-//            sprintf(commandStr, "rm img%d", i-1);
-//            std::cout<<"Removing old image in disk.\n\n";
-//            executeCMD(commandStr);
-//            std::cout<<"\n";
-//        }
+        //Removing old image in files
+        if (i!=1) {
+            sprintf(commandStr, "rm img%d", i-1);
+            std::cout<<"Removing old image in disk.\n\n";
+            executeCMD(commandStr);
+            std::cout<<"\n";
+        }
     }
 
     return 0;
