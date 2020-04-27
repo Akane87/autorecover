@@ -7,6 +7,21 @@
 #include <string>
 #include <cstring>
 
+#include <grpcpp/grpcpp.h>
+#include <grpcpp/support/status.h>
+#include <grpcpp/server_context.h>
+#include "recover_service.grpc.pb.h"
+#include "recover_service.pb.h"
+
+using grpc::Channel;
+using grpc::ClientContext;
+using grpc::Status;
+using grpc::Server;
+using grpc::ServerBuilder;
+using grpc::ServerContext;
+using grpc::Status;
+using namespace recoverer;
+
 std::string containerID, imageName;
 
 void executeCMD(const char *cmd)
@@ -47,8 +62,15 @@ int main(int argc, char** argv) {
     containerID=argv[1];
     imageName=argv[2];
 
+    auto channel=CreateChannel("127.0.0.1:7000", grpc::InsecureChannelCredentials());
+    auto stub=recover_service::NewStub(channel);
+
+    int imageN=2;
+
     //Iteration 0
     char commandStr[1024];
+    char *buffer;
+    buffer=new char[1024*1024];
 
     //Commit to image 0
     sprintf(commandStr, "docker commit %s %s:0", containerID.c_str(), imageName.c_str());
@@ -61,6 +83,69 @@ int main(int argc, char** argv) {
     std::cout<<"Saving Image #"<<0<<"\n\n";
     executeCMD(commandStr);
     std::cout<<"\n";
+
+    FILE* p;
+    std::string filename;
+    filename="img0";
+    p=fopen(filename.c_str(), "rb");
+    if (p==nullptr) assert(false);
+
+    Reply rpl;
+    Version vs;
+    vs.set_image(imageN);
+    vs.set_version(0);
+    fseek(p, 0, SEEK_END);
+    int size=ftell(p);
+    vs.set_size(size);
+    int chunkNum=(size+1024*1024-1)/(1024*1024);
+
+    Chunk ck;
+    ChunkList ckl;
+
+    rpl.set_status(9);
+    while(rpl.status()!=8) {
+        ClientContext cc2;
+        stub->TellVersion(&cc2, vs, &rpl);
+    }
+
+    Image imgn;
+    imgn.set_image(imageN);
+
+
+    for (int ii=0;ii<chunkNum;ii++){
+        int toSend=size-ii*1024*1024;
+        if (toSend>1024*1024) toSend=1024*1024;
+        fseek(p, ii*1024*1024, SEEK_SET);
+        fread(buffer, 1, toSend, p);
+        std::string bytes(buffer, toSend);
+        ck.set_image(imageN);
+        ck.set_version(0);
+        ck.set_number(ii);
+        ck.set_data(std::move(bytes));
+        ck.set_checksum(0);
+        ClientContext cc3;
+        stub->SendChunk(&cc3, ck, &rpl);
+    }
+
+    ClientContext cc7;
+    stub->Chunk2Send(&cc7, imgn, &ckl);
+    while(ckl.needed_size()!=0) {
+        for (auto ii:ckl.needed()){
+            int toSend=size-ii*1024*1024;
+            if (toSend>1024*1024) toSend=1024*1024;
+            fseek(p, ii*1024*1024, SEEK_SET);
+            fread(buffer, 1, toSend, p);
+            std::string bytes(buffer, toSend);
+            ck.set_image(imageN);
+            ck.set_version(0);
+            ck.set_data(std::move(bytes));
+            ClientContext cc4;
+            stub->SendChunk(&cc4, ck, &rpl);
+        }
+        ClientContext cc5;
+        stub->Chunk2Send(&cc5, imgn, &ckl);
+    }
+    fclose(p);
 
     for (int i=1; i<2147483647; i++) {
 
@@ -95,7 +180,72 @@ int main(int argc, char** argv) {
             executeCMD(commandStr);
             std::cout<<"\n";
         }
+
+        FILE* p;
+        std::string filename;
+        if (i==0) filename="img0"; else filename="diff"+std::to_string(i);
+        p=fopen(filename.c_str(), "rb");
+        if (p==nullptr) assert(false);
+
+        Reply rpl;
+        Version vs;
+        vs.set_image(imageN);
+        vs.set_version(i);
+        fseek(p, 0, SEEK_END);
+        int size=ftell(p);
+        vs.set_size(size);
+        int chunkNum=(size+1024*1024-1)/(1024*1024);
+
+        rpl.set_status(9);
+        while(rpl.status()!=8) {
+            ClientContext cc6;
+            stub->TellVersion(&cc6, vs, &rpl);
+        }
+
+        Chunk ck;
+        ChunkList ckl;
+
+        ClientContext cc8;
+        stub->Chunk2Send(&cc8, imgn, &ckl);
+
+        Image imgn;
+        imgn.set_image(imageN);
+
+        for (int ii=0;ii<chunkNum;ii++){
+            int toSend=size-ii*1024*1024;
+            if (toSend>1024*1024) toSend=1024*1024;
+            fseek(p, ii*1024*1024, SEEK_SET);
+            fread(buffer, 1, toSend, p);
+            std::string bytes(buffer, toSend);
+            ck.set_image(imageN);
+            ck.set_version(i);
+            ck.set_data(std::move(bytes));
+            ClientContext cc9;
+            stub->SendChunk(&cc9, ck, &rpl);
+        }
+
+        ClientContext cc10;
+        stub->Chunk2Send(&cc10, imgn, &ckl);
+        while(ckl.needed_size()!=0) {
+            for (auto ii:ckl.needed()){
+                int toSend=size-ii*1024*1024;
+                if (toSend>1024*1024) toSend=1024*1024;
+                fseek(p, ii*1024*1024, SEEK_SET);
+                fread(buffer, 1, toSend,  p);
+                std::string bytes(buffer, toSend);
+                ck.set_image(imageN);
+                ck.set_version(i);
+                ck.set_number(ii);
+                ck.set_data(std::move(bytes));
+                ClientContext cc11;
+                stub->SendChunk(&cc11, ck, &rpl);
+            }
+            ClientContext cc12;
+            stub->Chunk2Send(&cc12, imgn, &ckl);
+        }
+        fclose(p);
     }
 
+    delete[] buffer;
     return 0;
 }
