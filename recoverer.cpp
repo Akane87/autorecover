@@ -56,7 +56,7 @@ class svImpl final:public recover_service::Service{
     Status Chunk2Send(ServerContext* context, const Image* request, ChunkList* response)  override;
     Status SendChunk(ServerContext* context, const Chunk* request, Reply* response)  override;
     Status KeepAlive(ServerContext* context, const Reply* request, Reply* response) override;
-    Status RecoverServ(ServerContext* context, const Image* request, Reply* response) override;
+    Status RecoverServ(ServerContext* context, const ImageAndServName* request, Reply* response) override;
 };
 
 std::vector<int> images;
@@ -149,7 +149,7 @@ Status svImpl::KeepAlive(ServerContext *context, const Reply *request, Reply *re
     return Status::OK;
 }
 
-Status svImpl::RecoverServ(ServerContext *context, const Image *request, Reply *response) {
+Status svImpl::RecoverServ(ServerContext *context, const ImageAndServName *request, Reply *response) {
     int img=request->image();
     int version=(steps[img]==3?images[img]:images[img]-1);
     if (version>=0) {

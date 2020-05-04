@@ -69,8 +69,9 @@ int main() {
             if (delay_times[i]>=3) {
                 ClientContext cc;
                 Reply rpl;
-                Image img;
+                ImageAndServName img;
                 img.set_image(i);
+                img.set_servname(servNames[i]);
                 stubs[recv_node[i]]->RecoverServ(&cc, img, &rpl);
             }
         }

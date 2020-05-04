@@ -155,11 +155,11 @@ void recover_service::Stub::experimental_async::KeepAlive(::grpc::ClientContext*
   return ::grpc_impl::internal::ClientAsyncResponseReaderFactory< ::recoverer::Reply>::Create(channel_.get(), cq, rpcmethod_KeepAlive_, context, request, false);
 }
 
-::grpc::Status recover_service::Stub::RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image& request, ::recoverer::Reply* response) {
+::grpc::Status recover_service::Stub::RecoverServ(::grpc::ClientContext* context, const ::recoverer::ImageAndServName& request, ::recoverer::Reply* response) {
   return ::grpc::internal::BlockingUnaryCall(channel_.get(), rpcmethod_RecoverServ_, context, request, response);
 }
 
-void recover_service::Stub::experimental_async::RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)> f) {
+void recover_service::Stub::experimental_async::RecoverServ(::grpc::ClientContext* context, const ::recoverer::ImageAndServName* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)> f) {
   ::grpc_impl::internal::CallbackUnaryCall(stub_->channel_.get(), stub_->rpcmethod_RecoverServ_, context, request, response, std::move(f));
 }
 
@@ -167,7 +167,7 @@ void recover_service::Stub::experimental_async::RecoverServ(::grpc::ClientContex
   ::grpc_impl::internal::CallbackUnaryCall(stub_->channel_.get(), stub_->rpcmethod_RecoverServ_, context, request, response, std::move(f));
 }
 
-void recover_service::Stub::experimental_async::RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+void recover_service::Stub::experimental_async::RecoverServ(::grpc::ClientContext* context, const ::recoverer::ImageAndServName* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
   ::grpc_impl::internal::ClientCallbackUnaryFactory::Create(stub_->channel_.get(), stub_->rpcmethod_RecoverServ_, context, request, response, reactor);
 }
 
@@ -175,11 +175,11 @@ void recover_service::Stub::experimental_async::RecoverServ(::grpc::ClientContex
   ::grpc_impl::internal::ClientCallbackUnaryFactory::Create(stub_->channel_.get(), stub_->rpcmethod_RecoverServ_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* recover_service::Stub::AsyncRecoverServRaw(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* recover_service::Stub::AsyncRecoverServRaw(::grpc::ClientContext* context, const ::recoverer::ImageAndServName& request, ::grpc::CompletionQueue* cq) {
   return ::grpc_impl::internal::ClientAsyncResponseReaderFactory< ::recoverer::Reply>::Create(channel_.get(), cq, rpcmethod_RecoverServ_, context, request, true);
 }
 
-::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* recover_service::Stub::PrepareAsyncRecoverServRaw(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* recover_service::Stub::PrepareAsyncRecoverServRaw(::grpc::ClientContext* context, const ::recoverer::ImageAndServName& request, ::grpc::CompletionQueue* cq) {
   return ::grpc_impl::internal::ClientAsyncResponseReaderFactory< ::recoverer::Reply>::Create(channel_.get(), cq, rpcmethod_RecoverServ_, context, request, false);
 }
 
@@ -227,10 +227,10 @@ recover_service::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       recover_service_method_names[4],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< recover_service::Service, ::recoverer::Image, ::recoverer::Reply>(
+      new ::grpc::internal::RpcMethodHandler< recover_service::Service, ::recoverer::ImageAndServName, ::recoverer::Reply>(
           [](recover_service::Service* service,
              ::grpc_impl::ServerContext* ctx,
-             const ::recoverer::Image* req,
+             const ::recoverer::ImageAndServName* req,
              ::recoverer::Reply* resp) {
                return service->RecoverServ(ctx, req, resp);
              }, this)));
@@ -267,7 +267,7 @@ recover_service::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status recover_service::Service::RecoverServ(::grpc::ServerContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response) {
+::grpc::Status recover_service::Service::RecoverServ(::grpc::ServerContext* context, const ::recoverer::ImageAndServName* request, ::recoverer::Reply* response) {
   (void) context;
   (void) request;
   (void) response;

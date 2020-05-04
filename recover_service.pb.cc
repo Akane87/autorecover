@@ -27,6 +27,10 @@ class ImageDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Image> _instance;
 } _Image_default_instance_;
+class ImageAndServNameDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<ImageAndServName> _instance;
+} _ImageAndServName_default_instance_;
 class ChunkDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Chunk> _instance;
@@ -78,6 +82,20 @@ static void InitDefaultsscc_info_Image_recover_5fservice_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Image_recover_5fservice_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Image_recover_5fservice_2eproto}, {}};
 
+static void InitDefaultsscc_info_ImageAndServName_recover_5fservice_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::recoverer::_ImageAndServName_default_instance_;
+    new (ptr) ::recoverer::ImageAndServName();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::recoverer::ImageAndServName::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_ImageAndServName_recover_5fservice_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_ImageAndServName_recover_5fservice_2eproto}, {}};
+
 static void InitDefaultsscc_info_Reply_recover_5fservice_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -106,7 +124,7 @@ static void InitDefaultsscc_info_Version_recover_5fservice_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Version_recover_5fservice_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Version_recover_5fservice_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_recover_5fservice_2eproto[5];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_recover_5fservice_2eproto[6];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_recover_5fservice_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_recover_5fservice_2eproto = nullptr;
 
@@ -132,6 +150,13 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_recover_5fservice_2eproto::off
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::recoverer::Image, image_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::recoverer::ImageAndServName, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::recoverer::ImageAndServName, image_),
+  PROTOBUF_FIELD_OFFSET(::recoverer::ImageAndServName, servname_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::recoverer::Chunk, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -152,14 +177,16 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 0, -1, sizeof(::recoverer::Version)},
   { 8, -1, sizeof(::recoverer::Reply)},
   { 14, -1, sizeof(::recoverer::Image)},
-  { 20, -1, sizeof(::recoverer::Chunk)},
-  { 30, -1, sizeof(::recoverer::ChunkList)},
+  { 20, -1, sizeof(::recoverer::ImageAndServName)},
+  { 27, -1, sizeof(::recoverer::Chunk)},
+  { 37, -1, sizeof(::recoverer::ChunkList)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::recoverer::_Version_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::recoverer::_Reply_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::recoverer::_Image_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::recoverer::_ImageAndServName_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::recoverer::_Chunk_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::recoverer::_ChunkList_default_instance_),
 };
@@ -168,34 +195,37 @@ const char descriptor_table_protodef_recover_5fservice_2eproto[] PROTOBUF_SECTIO
   "\n\025recover_service.proto\022\trecoverer\"7\n\007Ve"
   "rsion\022\r\n\005image\030\001 \001(\005\022\017\n\007version\030\002 \001(\005\022\014\n"
   "\004size\030\003 \001(\005\"\027\n\005Reply\022\016\n\006status\030\001 \001(\005\"\026\n\005"
-  "Image\022\r\n\005image\030\001 \001(\005\"W\n\005Chunk\022\r\n\005image\030\001"
-  " \001(\005\022\017\n\007version\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\022\014\n"
-  "\004data\030\004 \001(\014\022\020\n\010checksum\030\005 \001(\005\"\033\n\tChunkLi"
-  "st\022\016\n\006needed\030\001 \003(\0052\221\002\n\017recover_service\0223"
-  "\n\013TellVersion\022\022.recoverer.Version\032\020.reco"
-  "verer.Reply\0224\n\nChunk2Send\022\020.recoverer.Im"
-  "age\032\024.recoverer.ChunkList\022/\n\tSendChunk\022\020"
-  ".recoverer.Chunk\032\020.recoverer.Reply\022/\n\tKe"
-  "epAlive\022\020.recoverer.Reply\032\020.recoverer.Re"
-  "ply\0221\n\013RecoverServ\022\020.recoverer.Image\032\020.r"
-  "ecoverer.Replyb\006proto3"
+  "Image\022\r\n\005image\030\001 \001(\005\"3\n\020ImageAndServName"
+  "\022\r\n\005image\030\001 \001(\005\022\020\n\010servname\030\002 \001(\t\"W\n\005Chu"
+  "nk\022\r\n\005image\030\001 \001(\005\022\017\n\007version\030\002 \001(\005\022\016\n\006nu"
+  "mber\030\003 \001(\005\022\014\n\004data\030\004 \001(\014\022\020\n\010checksum\030\005 \001"
+  "(\005\"\033\n\tChunkList\022\016\n\006needed\030\001 \003(\0052\234\002\n\017reco"
+  "ver_service\0223\n\013TellVersion\022\022.recoverer.V"
+  "ersion\032\020.recoverer.Reply\0224\n\nChunk2Send\022\020"
+  ".recoverer.Image\032\024.recoverer.ChunkList\022/"
+  "\n\tSendChunk\022\020.recoverer.Chunk\032\020.recovere"
+  "r.Reply\022/\n\tKeepAlive\022\020.recoverer.Reply\032\020"
+  ".recoverer.Reply\022<\n\013RecoverServ\022\033.recove"
+  "rer.ImageAndServName\032\020.recoverer.Replyb\006"
+  "proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_recover_5fservice_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_recover_5fservice_2eproto_sccs[5] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_recover_5fservice_2eproto_sccs[6] = {
   &scc_info_Chunk_recover_5fservice_2eproto.base,
   &scc_info_ChunkList_recover_5fservice_2eproto.base,
   &scc_info_Image_recover_5fservice_2eproto.base,
+  &scc_info_ImageAndServName_recover_5fservice_2eproto.base,
   &scc_info_Reply_recover_5fservice_2eproto.base,
   &scc_info_Version_recover_5fservice_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_recover_5fservice_2eproto_once;
 static bool descriptor_table_recover_5fservice_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_recover_5fservice_2eproto = {
-  &descriptor_table_recover_5fservice_2eproto_initialized, descriptor_table_protodef_recover_5fservice_2eproto, "recover_service.proto", 542,
-  &descriptor_table_recover_5fservice_2eproto_once, descriptor_table_recover_5fservice_2eproto_sccs, descriptor_table_recover_5fservice_2eproto_deps, 5, 0,
+  &descriptor_table_recover_5fservice_2eproto_initialized, descriptor_table_protodef_recover_5fservice_2eproto, "recover_service.proto", 606,
+  &descriptor_table_recover_5fservice_2eproto_once, descriptor_table_recover_5fservice_2eproto_sccs, descriptor_table_recover_5fservice_2eproto_deps, 6, 0,
   schemas, file_default_instances, TableStruct_recover_5fservice_2eproto::offsets,
-  file_level_metadata_recover_5fservice_2eproto, 5, file_level_enum_descriptors_recover_5fservice_2eproto, file_level_service_descriptors_recover_5fservice_2eproto,
+  file_level_metadata_recover_5fservice_2eproto, 6, file_level_enum_descriptors_recover_5fservice_2eproto, file_level_service_descriptors_recover_5fservice_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -816,6 +846,232 @@ void Image::InternalSwap(Image* other) {
 
 // ===================================================================
 
+void ImageAndServName::InitAsDefaultInstance() {
+}
+class ImageAndServName::_Internal {
+ public:
+};
+
+ImageAndServName::ImageAndServName()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:recoverer.ImageAndServName)
+}
+ImageAndServName::ImageAndServName(const ImageAndServName& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  servname_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_servname().empty()) {
+    servname_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.servname_);
+  }
+  image_ = from.image_;
+  // @@protoc_insertion_point(copy_constructor:recoverer.ImageAndServName)
+}
+
+void ImageAndServName::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_ImageAndServName_recover_5fservice_2eproto.base);
+  servname_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  image_ = 0;
+}
+
+ImageAndServName::~ImageAndServName() {
+  // @@protoc_insertion_point(destructor:recoverer.ImageAndServName)
+  SharedDtor();
+}
+
+void ImageAndServName::SharedDtor() {
+  servname_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void ImageAndServName::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ImageAndServName& ImageAndServName::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_ImageAndServName_recover_5fservice_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void ImageAndServName::Clear() {
+// @@protoc_insertion_point(message_clear_start:recoverer.ImageAndServName)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  servname_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  image_ = 0;
+  _internal_metadata_.Clear();
+}
+
+const char* ImageAndServName::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // int32 image = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          image_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // string servname = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          auto str = _internal_mutable_servname();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "recoverer.ImageAndServName.servname"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* ImageAndServName::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:recoverer.ImageAndServName)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 image = 1;
+  if (this->image() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_image(), target);
+  }
+
+  // string servname = 2;
+  if (this->servname().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_servname().data(), static_cast<int>(this->_internal_servname().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "recoverer.ImageAndServName.servname");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_servname(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:recoverer.ImageAndServName)
+  return target;
+}
+
+size_t ImageAndServName::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:recoverer.ImageAndServName)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string servname = 2;
+  if (this->servname().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_servname());
+  }
+
+  // int32 image = 1;
+  if (this->image() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_image());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ImageAndServName::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:recoverer.ImageAndServName)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ImageAndServName* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<ImageAndServName>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:recoverer.ImageAndServName)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:recoverer.ImageAndServName)
+    MergeFrom(*source);
+  }
+}
+
+void ImageAndServName::MergeFrom(const ImageAndServName& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:recoverer.ImageAndServName)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.servname().size() > 0) {
+
+    servname_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.servname_);
+  }
+  if (from.image() != 0) {
+    _internal_set_image(from._internal_image());
+  }
+}
+
+void ImageAndServName::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:recoverer.ImageAndServName)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ImageAndServName::CopyFrom(const ImageAndServName& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:recoverer.ImageAndServName)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ImageAndServName::IsInitialized() const {
+  return true;
+}
+
+void ImageAndServName::InternalSwap(ImageAndServName* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  servname_.Swap(&other->servname_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(image_, other->image_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ImageAndServName::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
 void Chunk::InitAsDefaultInstance() {
 }
 class Chunk::_Internal {
@@ -1321,6 +1577,9 @@ template<> PROTOBUF_NOINLINE ::recoverer::Reply* Arena::CreateMaybeMessage< ::re
 }
 template<> PROTOBUF_NOINLINE ::recoverer::Image* Arena::CreateMaybeMessage< ::recoverer::Image >(Arena* arena) {
   return Arena::CreateInternal< ::recoverer::Image >(arena);
+}
+template<> PROTOBUF_NOINLINE ::recoverer::ImageAndServName* Arena::CreateMaybeMessage< ::recoverer::ImageAndServName >(Arena* arena) {
+  return Arena::CreateInternal< ::recoverer::ImageAndServName >(arena);
 }
 template<> PROTOBUF_NOINLINE ::recoverer::Chunk* Arena::CreateMaybeMessage< ::recoverer::Chunk >(Arena* arena) {
   return Arena::CreateInternal< ::recoverer::Chunk >(arena);
