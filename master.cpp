@@ -23,6 +23,7 @@ using namespace recoverer;
 
 std::vector<std::string> addr;
 std::vector<int> recv_node;
+std::vector<std::string> servNames;
 std::vector<std::unique_ptr<recover_service::Stub>> stubs;
 std::vector<std::shared_ptr<Channel>> channels;
 
@@ -33,6 +34,7 @@ int main() {
     FILE* config;
     config=fopen("config.txt", "r");
     char *buf1=new char[256];
+    char *buf2=new char[256];
     int n;
     fscanf(config, "%d\n", &n);
     addr.resize(n+1);
@@ -40,9 +42,11 @@ int main() {
     stubs.resize(n+1);
     channels.resize(n+1);
     delay_times.resize(n+1);
+    servNames.resize(n+1);
     for (int i=1; i<=n; i++){
-        fscanf(config, "%s %d", buf1, &recv_node[i]);
+        fscanf(config, "%s %d %s", buf1, &recv_node[i], buf2);
         addr[i]=buf1;
+        servNames[i]=buf2;
         channels[i]=CreateChannel(buf1, grpc::InsecureChannelCredentials());
         stubs[i]=recover_service::NewStub(channels[i]);
     }
