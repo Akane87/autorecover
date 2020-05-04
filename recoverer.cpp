@@ -155,6 +155,21 @@ Status svImpl::RecoverServ(ServerContext *context, const Image *request, Reply *
     if (version>=0) {
         std::cout<<"To recover "<<img<<" "<<version<<std::endl;
     }
+    int vN=images[img];
+    if (steps[img]!=3) vN--;
+    if (vN==-1) return Status::OK;
+
+    char commandStr[1024];
+    sprintf(commandStr, "docker load --input img_%d_%d", img, vN);
+    std::cout<<"Loading backup: Image#"<<img<<", Version#"<<vN<<"\n\n";
+    executeCMD(commandStr);
+
+    char servname[32]="kvrunning";
+    sprintf(commandStr, "docker run --name serv_recv -p 4000:8000 %s:%d manage.py runserver 0.0.0.0:8000", servname, vN);
+    std::cout<<"Loading backup: Image#"<<img<<", Version#"<<vN<<"\n\n";
+    executeCMD(commandStr);
+    std::cout<<"\n";
+
     return Status::OK;
 }
 

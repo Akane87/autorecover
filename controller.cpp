@@ -55,8 +55,8 @@ void executeCMD(const char *cmd)
 }
 
 int main(int argc, char** argv) {
-    if (argc!=4) {
-        std::cout<<"controller [container ID] [image name] [recover node]\n";
+    if (argc!=5) {
+        std::cout<<"controller [container ID] [image name] [recover node] [image#]\n";
         return 0;
     }
     containerID=argv[1];
@@ -66,7 +66,8 @@ int main(int argc, char** argv) {
     auto channel=CreateChannel(recoverAddr, grpc::InsecureChannelCredentials());
     auto stub=recover_service::NewStub(channel);
 
-    int imageN=2;
+    int imageN;
+    sscanf(argv[4], "%d", &imageN);
 
     //Iteration 0
     char commandStr[1024];

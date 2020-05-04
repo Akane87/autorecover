@@ -38,11 +38,12 @@ int main() {
     addr.resize(n+1);
     recv_node.resize(n+1);
     stubs.resize(n+1);
+    channels.resize(n+1);
     delay_times.resize(n+1);
     for (int i=1; i<=n; i++){
         fscanf(config, "%s %d", buf1, &recv_node[i]);
         addr[i]=buf1;
-        channels[i]=CreateChannel(addr[i].c_str(), grpc::InsecureChannelCredentials());
+        channels[i]=CreateChannel(buf1, grpc::InsecureChannelCredentials());
         stubs[i]=recover_service::NewStub(channels[i]);
     }
     delete[] buf1;
@@ -69,7 +70,7 @@ int main() {
                 stubs[recv_node[i]]->RecoverServ(&cc, img, &rpl);
             }
         }
-        break;
+        //break;
     }
 }
 
