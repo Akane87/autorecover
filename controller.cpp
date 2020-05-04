@@ -22,7 +22,7 @@ using grpc::ServerContext;
 using grpc::Status;
 using namespace recoverer;
 
-std::string containerID, imageName;
+std::string containerID, imageName, recoverAddr;
 
 void executeCMD(const char *cmd)
 {
@@ -55,14 +55,15 @@ void executeCMD(const char *cmd)
 }
 
 int main(int argc, char** argv) {
-    if (argc!=3) {
-        std::cout<<"controller [container ID] [image name] \n";
+    if (argc!=4) {
+        std::cout<<"controller [container ID] [image name] [recover node]\n";
         return 0;
     }
     containerID=argv[1];
     imageName=argv[2];
+    recoverAddr=argv[3];
 
-    auto channel=CreateChannel("127.0.0.1:7000", grpc::InsecureChannelCredentials());
+    auto channel=CreateChannel(recoverAddr, grpc::InsecureChannelCredentials());
     auto stub=recover_service::NewStub(channel);
 
     int imageN=2;

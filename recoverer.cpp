@@ -41,6 +41,9 @@ void executeCMD(const char *cmd)
     delete[] result;
 }
 
+void recoverTheService(int img, int ver){
+
+}
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -52,6 +55,8 @@ class svImpl final:public recover_service::Service{
     Status TellVersion(ServerContext* context, const Version* request, Reply* response) override;
     Status Chunk2Send(ServerContext* context, const Image* request, ChunkList* response)  override;
     Status SendChunk(ServerContext* context, const Chunk* request, Reply* response)  override;
+    Status KeepAlive(ServerContext* context, const Reply* request, Reply* response) override;
+    Status RecoverServ(ServerContext* context, const Image* request, Reply* response) override;
 };
 
 std::vector<int> images;
@@ -63,7 +68,6 @@ std::vector<FILE*> fileP;
 char *zeroBuff;
 
 Status svImpl::TellVersion(ServerContext *context, const Version *request, Reply *response) {
-    std::cout<<"TOLD\n";
     int imN=request->image();
     int vN=request->version();
     if (vN!=images[imN]+1 && steps[imN]!=3) {
@@ -88,7 +92,6 @@ Status svImpl::TellVersion(ServerContext *context, const Version *request, Reply
         chunkTable[imN].clear();
         for (int i=0;i<chunkN;i++) chunkTable[imN].insert(i);
         response->set_status(8);
-        std::cout<<"TOLD2\n";
         return Status::OK;
     }
 }
@@ -114,7 +117,6 @@ Status svImpl::SendChunk(ServerContext *context, const Chunk *request, Reply *re
         return Status::OK;
     }
     chunkTable[imN].erase(cN);
-    std::cout<<cN<<' '<<chunkTable[imN].size()<<std::endl;
     fseek(fileP[imN], 1024*1024*cN, SEEK_SET);
     fwrite(request->data().c_str(), 1, request->data().size(), fileP[imN]);
     if (chunkTable[imN].size()==0) {
@@ -142,7 +144,26 @@ Status svImpl::SendChunk(ServerContext *context, const Chunk *request, Reply *re
     return Status::OK;
 }
 
-int main(){
+Status svImpl::KeepAlive(ServerContext *context, const Reply *request, Reply *response) {
+    response->set_status(8);
+    return Status::OK;
+}
+
+Status svImpl::RecoverServ(ServerContext *context, const Image *request, Reply *response) {
+    int img=request->image();
+    int version=(steps[img]==3?images[img]:images[img]-1);
+    if (version>=0) {
+        std::cout<<"To recover "<<img<<" "<<version<<std::endl;
+    }
+    return Status::OK;
+}
+
+int main(int argc, char** argv){
+    if (argc!=2) {
+        std::cout<<"recoverer [port]\n";
+        return 0;
+    }
+
     images.resize(3);
     images[1]=images[2]=-1;
     steps.resize(3);
@@ -154,11 +175,10 @@ int main(){
 
     svImpl service;
     ServerBuilder builder;
-    builder.AddListeningPort(std::string("0.0.0.0:7000"), grpc::InsecureServerCredentials());
+    builder.AddListeningPort(std::string("0.0.0.0:")+argv[1], grpc::InsecureServerCredentials());
     builder.RegisterService(&service);
     std::unique_ptr<Server> server(builder.BuildAndStart());
     server->Wait();
-    return 0;
-
     delete[] zeroBuff;
+    return 0;
 }

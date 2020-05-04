@@ -6,6 +6,8 @@ service recover_service{
     rpc TellVersion(Version) returns (Reply);
     rpc Chunk2Send(Image) returns (ChunkList);
     rpc SendChunk(Chunk) returns (Reply);
+    rpc KeepAlive(Reply) returns (Reply);
+    rpc RecoverServ(Image) returns (Reply);
 }
 
 message Version {

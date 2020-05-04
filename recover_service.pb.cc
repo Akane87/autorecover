@@ -171,12 +171,14 @@ const char descriptor_table_protodef_recover_5fservice_2eproto[] PROTOBUF_SECTIO
   "Image\022\r\n\005image\030\001 \001(\005\"W\n\005Chunk\022\r\n\005image\030\001"
   " \001(\005\022\017\n\007version\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\022\014\n"
   "\004data\030\004 \001(\014\022\020\n\010checksum\030\005 \001(\005\"\033\n\tChunkLi"
-  "st\022\016\n\006needed\030\001 \003(\0052\255\001\n\017recover_service\0223"
+  "st\022\016\n\006needed\030\001 \003(\0052\221\002\n\017recover_service\0223"
   "\n\013TellVersion\022\022.recoverer.Version\032\020.reco"
   "verer.Reply\0224\n\nChunk2Send\022\020.recoverer.Im"
   "age\032\024.recoverer.ChunkList\022/\n\tSendChunk\022\020"
-  ".recoverer.Chunk\032\020.recoverer.Replyb\006prot"
-  "o3"
+  ".recoverer.Chunk\032\020.recoverer.Reply\022/\n\tKe"
+  "epAlive\022\020.recoverer.Reply\032\020.recoverer.Re"
+  "ply\0221\n\013RecoverServ\022\020.recoverer.Image\032\020.r"
+  "ecoverer.Replyb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_recover_5fservice_2eproto_deps[1] = {
 };
@@ -190,7 +192,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_rec
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_recover_5fservice_2eproto_once;
 static bool descriptor_table_recover_5fservice_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_recover_5fservice_2eproto = {
-  &descriptor_table_recover_5fservice_2eproto_initialized, descriptor_table_protodef_recover_5fservice_2eproto, "recover_service.proto", 442,
+  &descriptor_table_recover_5fservice_2eproto_initialized, descriptor_table_protodef_recover_5fservice_2eproto, "recover_service.proto", 542,
   &descriptor_table_recover_5fservice_2eproto_once, descriptor_table_recover_5fservice_2eproto_sccs, descriptor_table_recover_5fservice_2eproto_deps, 5, 0,
   schemas, file_default_instances, TableStruct_recover_5fservice_2eproto::offsets,
   file_level_metadata_recover_5fservice_2eproto, 5, file_level_enum_descriptors_recover_5fservice_2eproto, file_level_service_descriptors_recover_5fservice_2eproto,

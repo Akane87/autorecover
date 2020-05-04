@@ -57,6 +57,20 @@ class recover_service final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>> PrepareAsyncSendChunk(::grpc::ClientContext* context, const ::recoverer::Chunk& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>>(PrepareAsyncSendChunkRaw(context, request, cq));
     }
+    virtual ::grpc::Status KeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::recoverer::Reply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>> AsyncKeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>>(AsyncKeepAliveRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>> PrepareAsyncKeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>>(PrepareAsyncKeepAliveRaw(context, request, cq));
+    }
+    virtual ::grpc::Status RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image& request, ::recoverer::Reply* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>> AsyncRecoverServ(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>>(AsyncRecoverServRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>> PrepareAsyncRecoverServ(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>>(PrepareAsyncRecoverServRaw(context, request, cq));
+    }
     class experimental_async_interface {
      public:
       virtual ~experimental_async_interface() {}
@@ -96,6 +110,30 @@ class recover_service final {
       #else
       virtual void SendChunk(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
       #endif
+      virtual void KeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void KeepAlive(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void KeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply* request, ::recoverer::Reply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void KeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void KeepAlive(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void KeepAlive(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      virtual void RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void RecoverServ(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void RecoverServ(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void RecoverServ(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
     };
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
     typedef class experimental_async_interface async_interface;
@@ -111,6 +149,10 @@ class recover_service final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::ChunkList>* PrepareAsyncChunk2SendRaw(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>* AsyncSendChunkRaw(::grpc::ClientContext* context, const ::recoverer::Chunk& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>* PrepareAsyncSendChunkRaw(::grpc::ClientContext* context, const ::recoverer::Chunk& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>* AsyncKeepAliveRaw(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>* PrepareAsyncKeepAliveRaw(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>* AsyncRecoverServRaw(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::recoverer::Reply>* PrepareAsyncRecoverServRaw(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -135,6 +177,20 @@ class recover_service final {
     }
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>> PrepareAsyncSendChunk(::grpc::ClientContext* context, const ::recoverer::Chunk& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>>(PrepareAsyncSendChunkRaw(context, request, cq));
+    }
+    ::grpc::Status KeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::recoverer::Reply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>> AsyncKeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>>(AsyncKeepAliveRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>> PrepareAsyncKeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>>(PrepareAsyncKeepAliveRaw(context, request, cq));
+    }
+    ::grpc::Status RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image& request, ::recoverer::Reply* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>> AsyncRecoverServ(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>>(AsyncRecoverServRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>> PrepareAsyncRecoverServ(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>>(PrepareAsyncRecoverServRaw(context, request, cq));
     }
     class experimental_async final :
       public StubInterface::experimental_async_interface {
@@ -175,6 +231,30 @@ class recover_service final {
       #else
       void SendChunk(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
       #endif
+      void KeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)>) override;
+      void KeepAlive(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void KeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply* request, ::recoverer::Reply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void KeepAlive(::grpc::ClientContext* context, const ::recoverer::Reply* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void KeepAlive(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void KeepAlive(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      void RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)>) override;
+      void RecoverServ(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void RecoverServ(::grpc::ClientContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void RecoverServ(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void RecoverServ(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::recoverer::Reply* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
      private:
       friend class Stub;
       explicit experimental_async(Stub* stub): stub_(stub) { }
@@ -192,9 +272,15 @@ class recover_service final {
     ::grpc::ClientAsyncResponseReader< ::recoverer::ChunkList>* PrepareAsyncChunk2SendRaw(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* AsyncSendChunkRaw(::grpc::ClientContext* context, const ::recoverer::Chunk& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* PrepareAsyncSendChunkRaw(::grpc::ClientContext* context, const ::recoverer::Chunk& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* AsyncKeepAliveRaw(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* PrepareAsyncKeepAliveRaw(::grpc::ClientContext* context, const ::recoverer::Reply& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* AsyncRecoverServRaw(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::recoverer::Reply>* PrepareAsyncRecoverServRaw(::grpc::ClientContext* context, const ::recoverer::Image& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_TellVersion_;
     const ::grpc::internal::RpcMethod rpcmethod_Chunk2Send_;
     const ::grpc::internal::RpcMethod rpcmethod_SendChunk_;
+    const ::grpc::internal::RpcMethod rpcmethod_KeepAlive_;
+    const ::grpc::internal::RpcMethod rpcmethod_RecoverServ_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -205,6 +291,8 @@ class recover_service final {
     virtual ::grpc::Status TellVersion(::grpc::ServerContext* context, const ::recoverer::Version* request, ::recoverer::Reply* response);
     virtual ::grpc::Status Chunk2Send(::grpc::ServerContext* context, const ::recoverer::Image* request, ::recoverer::ChunkList* response);
     virtual ::grpc::Status SendChunk(::grpc::ServerContext* context, const ::recoverer::Chunk* request, ::recoverer::Reply* response);
+    virtual ::grpc::Status KeepAlive(::grpc::ServerContext* context, const ::recoverer::Reply* request, ::recoverer::Reply* response);
+    virtual ::grpc::Status RecoverServ(::grpc::ServerContext* context, const ::recoverer::Image* request, ::recoverer::Reply* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_TellVersion : public BaseClass {
@@ -266,7 +354,47 @@ class recover_service final {
       ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_TellVersion<WithAsyncMethod_Chunk2Send<WithAsyncMethod_SendChunk<Service > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_KeepAlive : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_KeepAlive() {
+      ::grpc::Service::MarkMethodAsync(3);
+    }
+    ~WithAsyncMethod_KeepAlive() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status KeepAlive(::grpc::ServerContext* /*context*/, const ::recoverer::Reply* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestKeepAlive(::grpc::ServerContext* context, ::recoverer::Reply* request, ::grpc::ServerAsyncResponseWriter< ::recoverer::Reply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_RecoverServ : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_RecoverServ() {
+      ::grpc::Service::MarkMethodAsync(4);
+    }
+    ~WithAsyncMethod_RecoverServ() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RecoverServ(::grpc::ServerContext* /*context*/, const ::recoverer::Image* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestRecoverServ(::grpc::ServerContext* context, ::recoverer::Image* request, ::grpc::ServerAsyncResponseWriter< ::recoverer::Reply>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_TellVersion<WithAsyncMethod_Chunk2Send<WithAsyncMethod_SendChunk<WithAsyncMethod_KeepAlive<WithAsyncMethod_RecoverServ<Service > > > > > AsyncService;
   template <class BaseClass>
   class ExperimentalWithCallbackMethod_TellVersion : public BaseClass {
    private:
@@ -408,11 +536,105 @@ class recover_service final {
     #endif
       { return nullptr; }
   };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_KeepAlive : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_KeepAlive() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(3,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::recoverer::Reply, ::recoverer::Reply>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::recoverer::Reply* request, ::recoverer::Reply* response) { return this->KeepAlive(context, request, response); }));}
+    void SetMessageAllocatorFor_KeepAlive(
+        ::grpc::experimental::MessageAllocator< ::recoverer::Reply, ::recoverer::Reply>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(3);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::recoverer::Reply, ::recoverer::Reply>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_KeepAlive() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status KeepAlive(::grpc::ServerContext* /*context*/, const ::recoverer::Reply* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* KeepAlive(
+      ::grpc::CallbackServerContext* /*context*/, const ::recoverer::Reply* /*request*/, ::recoverer::Reply* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* KeepAlive(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::recoverer::Reply* /*request*/, ::recoverer::Reply* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_RecoverServ : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_RecoverServ() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(4,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::recoverer::Image, ::recoverer::Reply>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::recoverer::Image* request, ::recoverer::Reply* response) { return this->RecoverServ(context, request, response); }));}
+    void SetMessageAllocatorFor_RecoverServ(
+        ::grpc::experimental::MessageAllocator< ::recoverer::Image, ::recoverer::Reply>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(4);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::recoverer::Image, ::recoverer::Reply>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_RecoverServ() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RecoverServ(::grpc::ServerContext* /*context*/, const ::recoverer::Image* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* RecoverServ(
+      ::grpc::CallbackServerContext* /*context*/, const ::recoverer::Image* /*request*/, ::recoverer::Reply* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* RecoverServ(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::recoverer::Image* /*request*/, ::recoverer::Reply* /*response*/)
+    #endif
+      { return nullptr; }
+  };
   #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-  typedef ExperimentalWithCallbackMethod_TellVersion<ExperimentalWithCallbackMethod_Chunk2Send<ExperimentalWithCallbackMethod_SendChunk<Service > > > CallbackService;
+  typedef ExperimentalWithCallbackMethod_TellVersion<ExperimentalWithCallbackMethod_Chunk2Send<ExperimentalWithCallbackMethod_SendChunk<ExperimentalWithCallbackMethod_KeepAlive<ExperimentalWithCallbackMethod_RecoverServ<Service > > > > > CallbackService;
   #endif
 
-  typedef ExperimentalWithCallbackMethod_TellVersion<ExperimentalWithCallbackMethod_Chunk2Send<ExperimentalWithCallbackMethod_SendChunk<Service > > > ExperimentalCallbackService;
+  typedef ExperimentalWithCallbackMethod_TellVersion<ExperimentalWithCallbackMethod_Chunk2Send<ExperimentalWithCallbackMethod_SendChunk<ExperimentalWithCallbackMethod_KeepAlive<ExperimentalWithCallbackMethod_RecoverServ<Service > > > > > ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_TellVersion : public BaseClass {
    private:
@@ -460,6 +682,40 @@ class recover_service final {
     }
     // disable synchronous version of this method
     ::grpc::Status SendChunk(::grpc::ServerContext* /*context*/, const ::recoverer::Chunk* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_KeepAlive : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_KeepAlive() {
+      ::grpc::Service::MarkMethodGeneric(3);
+    }
+    ~WithGenericMethod_KeepAlive() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status KeepAlive(::grpc::ServerContext* /*context*/, const ::recoverer::Reply* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_RecoverServ : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_RecoverServ() {
+      ::grpc::Service::MarkMethodGeneric(4);
+    }
+    ~WithGenericMethod_RecoverServ() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RecoverServ(::grpc::ServerContext* /*context*/, const ::recoverer::Image* /*request*/, ::recoverer::Reply* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -522,6 +778,46 @@ class recover_service final {
     }
     void RequestSendChunk(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_KeepAlive : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_KeepAlive() {
+      ::grpc::Service::MarkMethodRaw(3);
+    }
+    ~WithRawMethod_KeepAlive() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status KeepAlive(::grpc::ServerContext* /*context*/, const ::recoverer::Reply* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestKeepAlive(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_RecoverServ : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_RecoverServ() {
+      ::grpc::Service::MarkMethodRaw(4);
+    }
+    ~WithRawMethod_RecoverServ() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RecoverServ(::grpc::ServerContext* /*context*/, const ::recoverer::Image* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestRecoverServ(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -639,6 +935,82 @@ class recover_service final {
       { return nullptr; }
   };
   template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_KeepAlive : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_KeepAlive() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(3,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->KeepAlive(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_KeepAlive() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status KeepAlive(::grpc::ServerContext* /*context*/, const ::recoverer::Reply* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* KeepAlive(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* KeepAlive(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_RecoverServ : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_RecoverServ() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(4,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->RecoverServ(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_RecoverServ() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RecoverServ(::grpc::ServerContext* /*context*/, const ::recoverer::Image* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* RecoverServ(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* RecoverServ(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_TellVersion : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -719,9 +1091,63 @@ class recover_service final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedSendChunk(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::recoverer::Chunk,::recoverer::Reply>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_TellVersion<WithStreamedUnaryMethod_Chunk2Send<WithStreamedUnaryMethod_SendChunk<Service > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_KeepAlive : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_KeepAlive() {
+      ::grpc::Service::MarkMethodStreamed(3,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::recoverer::Reply, ::recoverer::Reply>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::recoverer::Reply, ::recoverer::Reply>* streamer) {
+                       return this->StreamedKeepAlive(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_KeepAlive() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status KeepAlive(::grpc::ServerContext* /*context*/, const ::recoverer::Reply* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedKeepAlive(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::recoverer::Reply,::recoverer::Reply>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_RecoverServ : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_RecoverServ() {
+      ::grpc::Service::MarkMethodStreamed(4,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::recoverer::Image, ::recoverer::Reply>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::recoverer::Image, ::recoverer::Reply>* streamer) {
+                       return this->StreamedRecoverServ(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_RecoverServ() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status RecoverServ(::grpc::ServerContext* /*context*/, const ::recoverer::Image* /*request*/, ::recoverer::Reply* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedRecoverServ(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::recoverer::Image,::recoverer::Reply>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_TellVersion<WithStreamedUnaryMethod_Chunk2Send<WithStreamedUnaryMethod_SendChunk<WithStreamedUnaryMethod_KeepAlive<WithStreamedUnaryMethod_RecoverServ<Service > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_TellVersion<WithStreamedUnaryMethod_Chunk2Send<WithStreamedUnaryMethod_SendChunk<Service > > > StreamedService;
+  typedef WithStreamedUnaryMethod_TellVersion<WithStreamedUnaryMethod_Chunk2Send<WithStreamedUnaryMethod_SendChunk<WithStreamedUnaryMethod_KeepAlive<WithStreamedUnaryMethod_RecoverServ<Service > > > > > StreamedService;
 };
 
 }  // namespace recoverer
